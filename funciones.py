@@ -52,20 +52,19 @@ def FP_Coseno(M1, args=None):
     return FP_iter(M1, lambda x: _lambda * (1 - np.cos(x*np.pi / (2*_lambda))))
 
 
-def read(ruta):
-    list_func = [(FP_Iden, 'Identidad', []), (FP_Neg, 'Negativo', []), (FP_gamma, 'Gamma', [0.5]),
-                 (FP_Log, 'Log', [1]), (FP_Seno, 'Sin', []), (FP_Coseno, 'Cos', [])]
-    img = cv2.imread(ruta)
-    for i, cont in enumerate(list_func):
-        func, title, args = cont
-        imgE = func(img, args[0])
-        cv2.imwrite('{}.png'.format(title), imgE)
+list_func = {'Identidad': (FP_Iden, 'Identidad', []), 'Negativo': (FP_Neg, 'Negativo', []),
+             'Gamma': (FP_gamma, 'Gamma', [0.5]), 'Log': (FP_Log, 'Log', [1]), 'Sin': (FP_Seno, 'Sin', []),
+             'Cos': (FP_Coseno, 'Cos', [])}
+
+# def read(ruta):
+#     list_func = [(FP_Iden, 'Identidad', []), (FP_Neg, 'Negativo', []), (FP_gamma, 'Gamma', [0.5]),
+#                  (FP_Log, 'Log', [1]), (FP_Seno, 'Sin', []), (FP_Coseno, 'Cos', [])]
+#     img = cv2.imread(ruta)
+#     for i, cont in enumerate(list_func):
+#         func, title, args = cont
+#         imgE = func(img, args[0])
+#         cv2.imwrite('{}.png'.format(title), imgE)
 
 
-def main():
-    read('rumbling.png')
 
-
-if __name__ == '__main__':
-    main()
 
