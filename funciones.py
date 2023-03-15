@@ -16,55 +16,58 @@ def FP_iter(M1, func, args=None):
 
 
 def FP_Iden(M1, args=None):
-    return FP_iter(M1, lambda x: x)
+    cv2.imread('output.png', FP_iter(M1, lambda x: x))
 
 
 def FP_Neg(M1, args=None):
-    return FP_iter(M1, lambda x: _lambda - x)
+    cv2.imread('output.png', FP_iter(M1, lambda x: _lambda - x))
+
+
+def FP_Grises(M1, args=None):
+    M2 = np.zeros(M1.shape, dtype=np.uint8)
+    for i in range(M1.shape[0]):
+        for j in range(M1.shape[1]):
+            M2[i, j] = np.mean(M1[i, j])
+    cv2.imwrite('output.png', M2)
 
 
 def FP_Bin(M1, args=_lambda//2):
     umbral = args
-    return FP_iter(M1, lambda x: _lambda if x > umbral else 0)
+    cv2.imwrite('output.png', FP_iter(M1, lambda x: _lambda if x > umbral else 0))
+
 
 
 def FP_BinInv(M1, args=_lambda//2):
     umbral = args
-    return FP_iter(M1, lambda x: 0 if x > umbral else _lambda)
+    cv2.imwrite('output.png', FP_iter(M1, lambda x: 0 if x > umbral else _lambda))
 
 
 def FP_Log(M1, args=1):
     a = args
     c = _lambda / np.log(1 + a*_lambda)
-    return FP_iter(M1, lambda x: c * np.log(1 + a*x))
+    cv2.imwrite('output.png', FP_iter(M1, lambda x: c * np.log(1 + a*x)))
 
 
 def FP_gamma(M1, args=0.5):
     gamma = args
-    return FP_iter(M1, lambda x: _lambda * (x / _lambda)**gamma)
+    cv2.imwrite('output.png', FP_iter(M1, lambda x: _lambda * (x / _lambda)**gamma))
 
 
 def FP_Seno(M1, args=None):
-    return FP_iter(M1, lambda x: _lambda * np.sin(x*np.pi / (2*_lambda)))
+    cv2.imwrite('output.png', FP_iter(M1, lambda x: _lambda * np.sin(x*np.pi / (2*_lambda))))
 
 
 def FP_Coseno(M1, args=None):
-    return FP_iter(M1, lambda x: _lambda * (1 - np.cos(x*np.pi / (2*_lambda))))
+    cv2.imwrite('output.png', FP_iter(M1, lambda x: _lambda * (1 - np.cos(x*np.pi / (2*_lambda)))))
 
 
-list_func = {'Identidad': (FP_Iden, 'Identidad', []), 'Negativo': (FP_Neg, 'Negativo', []),
-             'Gamma': (FP_gamma, 'Gamma', [0.5]), 'Log': (FP_Log, 'Log', [1]), 'Sin': (FP_Seno, 'Sin', []),
-             'Cos': (FP_Coseno, 'Cos', [])}
-
-# def read(ruta):
-#     list_func = [(FP_Iden, 'Identidad', []), (FP_Neg, 'Negativo', []), (FP_gamma, 'Gamma', [0.5]),
-#                  (FP_Log, 'Log', [1]), (FP_Seno, 'Sin', []), (FP_Coseno, 'Cos', [])]
-#     img = cv2.imread(ruta)
-#     for i, cont in enumerate(list_func):
-#         func, title, args = cont
-#         imgE = func(img, args[0])
-#         cv2.imwrite('{}.png'.format(title), imgE)
-
-
-
+def FR_Border(M1):
+    high = M1.shape[0]
+    width = M1.shape[1]
+    M2 = np.zeros((high, width, 3), dtype=np.uint8)
+    for k in range(3):
+        for i in range(high):
+            for j in range(width-1):
+                M2[i, j, k] = M1[i, j+1, k] - M1[i, j, k]
+    cv2.imwrite('output.png', M2)
 

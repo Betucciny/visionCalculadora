@@ -6,94 +6,76 @@ from tkinter import filedialog as fd
 from functools import partial
 from PIL import ImageTk, Image
 
-
-def change_image(filename, label1, label2):
-    new_image = ImageTk.PhotoImage(Image.open(filename).resize((400, 300)))
-    label1.configure(image=new_image)
-    label1.image = new_image
-    label2.configure(image=new_image)
-    label2.image = new_image
-    root.update()
+def abrir_imagen():
+    global imagen
+    ruta = fd.askopenfilename(title = "Abrir Imagen", filetypes = (("png files","*.png"),("all files","*.*")))
+    imagen = cv2.imread(ruta)
 
 
-def select_file(label1, label2):
-    filetypes = (
-        ('Imagenes', '*.png *.jpg *.jpeg *.gif'),
-    )
-
-    filename = fd.askopenfilename(
-        title='Open a file',
-        initialdir='/',
-        filetypes=filetypes)
-    try:
-        change_image(filename, label1, label2)
-        global imageToProcess
-        imageToProcess = cv2.imread(filename)
-        imageToProcess = cv2.resize(imageToProcess, (400, 300))
-    except:
-        print(f"No se ha seleccionado ninguna imagen {filename}")
-        pass
-
-
-def apply_filter(select: str, original, aplied, arg):
-    func, title, args = list_func[select]
-    imgE = cv2.cvtColor(func(original, arg), cv2.COLOR_BGR2RGB)
-    cv2.imwrite('{}.png'.format(title), imgE)
-    image = Image.fromarray(imgE, 'RGB')
-    image = ImageTk.PhotoImage(image=image)
-    aplied.configure(image=image)
-    aplied.image = image
-    root.update()
-
+imagen = cv2.imread('rumbling.png')
 
 root = Tk()
-root.minsize(900, 450)
-root.maxsize(900, 450)
-root.title("Calculadora de imagenes")
-root.geometry("900x450")
+root.title("Calculadora de Imagenes")
+root.geometry("300x20")
 
-top = Frame(root)
-bottom = Frame(root)
-top.pack(side=TOP)
-bottom.pack(side=BOTTOM, fill=BOTH, expand=True)
-
-imageToProcess = cv2.imread('rumbling.png')
-imageToProcess = cv2.resize(imageToProcess, (400, 300))
-
-title = Label(root, text="Calculadora de imagenes", font=("Arial", 24))
-title.pack(in_=top, side=TOP, padx=10, pady=10)
-
-image = ImageTk.PhotoImage(Image.open('rumbling.png').resize((400, 300)))
-label_image_original = Label(root, image=image, width=400, height=300)
-label_image_original.pack(in_=top, side=LEFT, padx=10, pady=10)
-
-label_image_processed = Label(root, image=image, width=400, height=300)
-label_image_processed.pack(in_=top, side=RIGHT, padx=10, pady=10)
+menu_principal = Menu(root)
 
 
-buttonChange = Button(root, text="Cambiar imagen", command=partial(select_file, label_image_original, label_image_processed))
-buttonChange.pack(in_=bottom, side=LEFT, padx=10, pady=10, fill=BOTH, expand=True)
+archivo = Menu(menu_principal, tearoff=0)
 
-opciones = [i for i in list_func.keys()]
-clicked = StringVar()
-clicked.set(opciones[0])
+archivo.add_command(label="Abrir Imagen", command=abrir_imagen)
 
-buttonApply = Button(root, text="Aplicar", command=lambda : apply_filter(clicked.get(), imageToProcess, label_image_processed, float(opciones_arg_dict[clicked_arg.get()])))
-buttonApply.pack(in_=bottom, side=RIGHT, padx=10, pady=10, fill=BOTH, expand=True)
+editar = Menu(menu_principal, tearoff=0)
 
-drop = OptionMenu(root, clicked, *opciones)
-drop.pack(in_=bottom, side=RIGHT, padx=10, pady=10, fill=BOTH, expand=True)
+filtro_puntual = Menu(editar, tearoff=0)
 
-opciones_arg_dict = {"1/5": 1/5, "1/4": 1/4, "1/3": 1/3, "1/2": 1/2, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5}
-clicked_arg = StringVar()
-opciones_arg = [i for i in opciones_arg_dict.keys()]
-clicked_arg.set(opciones_arg[0])
+filtro_puntual.add_command(label="Identidad", command=lambda : FP_Iden(imagen))
+filtro_puntual.add_command(label="Negativo", command=lambda : FP_Neg(imagen))
+filtro_puntual.add_command(label="Grises", command=lambda : FP_Grises(imagen))
 
-drop_arg = OptionMenu(root, clicked_arg, *opciones_arg)
-drop_arg.pack(in_=bottom, side=RIGHT, padx=10, pady=10, fill=BOTH, expand=True)
+binario_threshold = [i for i in range(0, 256, 51)]
+
+binario = Menu(filtro_puntual, tearoff=0)
+for i in binario_threshold:
+    binario.add_command(label=str(i), command=partial(FP_Bin, imagen, args=i))
+
+binario_inverso = Menu(filtro_puntual, tearoff=0)
+for i in binario_threshold:
+    binario_inverso.add_command(label=str(i), command=partial(FP_BinInv, imagen, args=i))
+
+logarit_m = [i for i in range(1, 11)]
+
+logaritmico = Menu(filtro_puntual, tearoff=0)
+for i in logarit_m:
+    logaritmico.add_command(label=str(i), command=partial(FP_Log, imagen, args=i))
+
+gamma_m = [i/2 for i in range(1, 11)]
+
+gamma = Menu(filtro_puntual, tearoff=0)
+for i in gamma_m:
+    gamma.add_command(label=str(i), command=partial(FP_gamma, imagen, args=i))
+
+filtro_puntual.add_command(label="Seno", command=lambda : FP_Seno(imagen))
+filtro_puntual.add_command(label="Coseno", command=lambda : FP_Coseno(imagen))
+
+filtro_puntual.add_cascade(label="Binario", menu=binario)
+filtro_puntual.add_cascade(label="Binario Inverso", menu=binario_inverso)
+filtro_puntual.add_cascade(label="Logaritmico", menu=logaritmico)
+filtro_puntual.add_cascade(label="Gamma", menu=gamma)
+
+editar.add_cascade(label="Filtro Puntual", menu=filtro_puntual)
 
 
 
+
+
+
+menu_principal.add_cascade(label="Archivo", menu=archivo)
+menu_principal.add_cascade(label="Editar", menu=editar)
+
+
+# Asignar el menú principal a la ventana principal
+root.config(menu=menu_principal)
 
 root.mainloop()
 
