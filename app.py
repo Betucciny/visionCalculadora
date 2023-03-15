@@ -22,12 +22,10 @@ menu_principal = Menu(root)
 
 
 archivo = Menu(menu_principal, tearoff=0)
-
 archivo.add_command(label="Abrir Imagen", command=abrir_imagen)
 
-editar = Menu(menu_principal, tearoff=0)
 
-filtro_puntual = Menu(editar, tearoff=0)
+filtro_puntual = Menu(menu_principal, tearoff=0)
 
 filtro_puntual.add_command(label="Identidad", command=lambda : FP_Iden(imagen))
 filtro_puntual.add_command(label="Negativo", command=lambda : FP_Neg(imagen))
@@ -63,20 +61,15 @@ filtro_puntual.add_cascade(label="Binario Inverso", menu=binario_inverso)
 filtro_puntual.add_cascade(label="Logaritmico", menu=logaritmico)
 filtro_puntual.add_cascade(label="Gamma", menu=gamma)
 
-editar.add_cascade(label="Filtro Puntual", menu=filtro_puntual)
-
-
 
 
 
 
 menu_principal.add_cascade(label="Archivo", menu=archivo)
-menu_principal.add_cascade(label="Editar", menu=editar)
+menu_principal.add_cascade(label="Filtro Puntual", menu=filtro_puntual)
 
 
-# Asignar el menú principal a la ventana principal
 root.config(menu=menu_principal)
-
 root.mainloop()
 
 
