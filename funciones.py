@@ -193,7 +193,7 @@ def detect_edges_sobel(img):
     magnitude_norm = cv2.normalize(magnitude, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
     direction_norm = cv2.normalize(direction, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
 
-    return [sobel_x, sobel_y, magnitude_norm
+    return [sobel_x, sobel_y, magnitude_norm]
 
 
 # (b) Detector Canny (Revisar)
