@@ -20,7 +20,7 @@ imagen = cv2.imread('rumbling.png')
 
 root = Tk()
 root.title("Calculadora de Imagenes")
-root.geometry("300x20")
+root.geometry("400x8")
 
 menu_principal = Menu(root)
 
@@ -96,11 +96,33 @@ filt_spacial = Menu(menu_principal, tearoff=0)
 for i, j in zip(mask_list, mask_desc):
     filt_spacial.add_command(label=j, command=lambda: (write_image(Conv(imagen, i)), show_confirmacion1()))
 
+edges = Menu(filt_spacial, tearoff=0)
+
+def sobel(imagen):
+    resultados = detect_edges_sobel(imagen)
+    write_image(resultados[0], 'cambios_x.png')
+    write_image(resultados[1], 'cambios_y.png')
+    write_image(resultados[2], 'magnitud.png')
+
+
+edges.add_command(label="Sobel", command=lambda: (sobel(imagen), show_confirmacion1()))
+
+
+def canny(imagen):
+    resultados = detect_edges_canny(imagen)
+    write_image(resultados[0], 'magnitud.png')
+    write_image(resultados[1], 'direccion.png')
+    write_image(resultados[2], 'canny.png')
+
+
+edges.add_command(label="Canny", command=lambda: (canny(imagen), show_confirmacion1()))
+
 
 menu_principal.add_cascade(label="Archivo", menu=archivo)
 menu_principal.add_cascade(label="Filtro Puntual", menu=filtro_puntual)
 menu_principal.add_cascade(label="Histograma", menu=equal_hist)
 menu_principal.add_cascade(label="Filtro Espacial", menu=filt_spacial)
+menu_principal.add_cascade(label="Bordes", menu=edges)
 
 root.config(menu=menu_principal)
 root.mainloop()
