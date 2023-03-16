@@ -35,6 +35,8 @@ filtro_puntual.add_command(label="Identidad", command=lambda : (FP_Iden(imagen),
 filtro_puntual.add_command(label="Negativo", command=lambda : (FP_Neg(imagen), show_confirmacion2()))
 filtro_puntual.add_command(label="Grises", command=lambda : (FP_Grises(imagen), show_confirmacion2()))
 
+
+
 binario_threshold = [i for i in range(0, 256, 51)]
 
 binario = Menu(filtro_puntual, tearoff=0)
@@ -78,8 +80,6 @@ filtro_puntual.add_cascade(label="Aclarado Exponencial", menu=expa)
 
 filtro_puntual.add_cascade(label="Binario", menu=binario)
 filtro_puntual.add_cascade(label="Binario Inverso", menu=binario_inverso)
-
-
 
 
 

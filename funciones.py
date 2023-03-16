@@ -99,22 +99,43 @@ def FP_Sigmoid_Tanh(M1, args=(5, 0.5)):
 
 # 3. Ecualizacion por histograma (Revisar)
 def histogram_equalization(M1):
-    M1 = cv2.cvtColor(M1, cv2.COLOR_BGR2GRAY)
-    # Calcular el histograma de la imagen de entrada
-    hist, bins = np.histogram(M1.flatten(), 256, [0, 256])
+    # Convertir imagen a escala de grises
+    gray = cv2.cvtColor(M1, cv2.COLOR_BGR2GRAY)
 
-    # Calcular la función de distribución acumulativa (CDF)
-    cdf = hist.cumsum()
-    cdf_normalized = cdf * hist.max() / cdf.max()
+    # Calcular histograma de la imagen original
+    hist_original = cv2.calcHist([gray], [0], None, [256], [0, 256])
 
     # Ecualizar la imagen
-    img_equalized = np.interp(M1.flatten(), bins[:-1], cdf_normalized).reshape(M1.shape)
+    img_equalized = cv2.equalizeHist(gray)
 
-    # Calcular el histograma de la imagen ecualizada
-    hist_eq, bins_eq = np.histogram(img_equalized.flatten(), 256, [0, 256])
+    # Calcular histograma de la imagen ecualizada
+    hist_equalized = cv2.calcHist([img_equalized], [0], None, [256], [0, 256])
+
+    # Mostrar imagen original y su histograma
+    fig, axs = plt.subplots(2, 2, figsize=(10, 10))
+    axs[0, 0].imshow(cv2.cvtColor(M1, cv2.COLOR_BGR2RGB))
+    axs[0, 0].set_title('Imagen Original')
+    axs[0, 1].plot(hist_original)
+    axs[0, 1].set_title('Histograma Original')
+    axs[0, 1].set_xlim([0, 256])
+
+    # Mostrar imagen ecualizada y su histograma
+    axs[1, 0].imshow(cv2.cvtColor(img_equalized, cv2.COLOR_GRAY2RGB))
+    axs[1, 0].set_title('Imagen Ecualizada')
+    axs[1, 1].plot(hist_equalized)
+    axs[1, 1].set_title('Histograma Ecualizado')
+    axs[1, 1].set_xlim([0, 256])
+
+    plt.show()
 
 
 # 4. Filtrado espacial (Revisar)
+# Definir una mascara: Esta mascara aplica un filtro de realce de bordes a la imagen.
+mask = np.array([
+    [0, -1, 0],
+    [-1, 5, -1],
+    [0, -1, 0]
+])
 def spatial_filter(M1, mask):
     # Convertir la imagen a escala de grises
     img_gray = cv2.cvtColor(M1, cv2.COLOR_BGR2GRAY)
@@ -138,12 +159,12 @@ def spatial_filter(M1, mask):
     # Normalizar la imagen filtrada
     img_filtered = cv2.normalize(img_filtered, None, 0, 255, cv2.NORM_MINMAX)
 
-# Definir una mascara: Esta mascara aplica un filtro de realce de bordes a la imagen.
-mask = np.array([
-    [0, -1, 0],
-    [-1, 5, -1],
-    [0, -1, 0]
-])
+    fig, axs = plt.subplots(1, 2, figsize=(10, 5))
+    axs[0].imshow(cv2.cvtColor(M1, cv2.COLOR_BGR2RGB))
+    axs[0].set_title('Imagen Original')
+    axs[1].imshow(cv2.cvtColor(img_filtered, cv2.COLOR_GRAY2RGB))
+    axs[1].set_title('Imagen Filtrada Normalizada')
+    plt.show()
 
 
 # 5. Detección de orillas (Por completar)
