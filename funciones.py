@@ -194,6 +194,8 @@ def detect_edges_sobel(img):
     magnitude_norm = cv2.normalize(magnitude, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
     direction_norm = cv2.normalize(direction, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
 
+    return [{sobel_x, cmap='gray'}, {sobel_y, cmap='gray'}, {magnitude_norm, cmap='gray'}]
+
     # Mostrar las imágenes de bordes en X, Y y la magnitud
     fig, axs = plt.subplots(1, 3, figsize=(15, 5))
     axs[0].imshow(sobel_x, cmap='gray')
