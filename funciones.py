@@ -16,7 +16,12 @@ def FP_iter(M1, func, args=None):
     return M2
 
 
-def write_image(M1):
+def write_histogram(hist, filename='histogram.png'):
+    plt.plot(hist)
+    plt.savefig(filename)
+
+
+def write_image(M1, filename='output.png'):
     cv2.imwrite('output.png', M1)
 
 
