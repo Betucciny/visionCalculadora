@@ -141,13 +141,7 @@ def spatial_filter(M1, mask):
     # Normalizar la imagen filtrada
     img_filtered = cv2.normalize(img_filtered, None, 0, 255, cv2.NORM_MINMAX)
 
-
-    fig, axs = plt.subplots(1, 2, figsize=(10, 5))
-    axs[0].imshow(cv2.cvtColor(M1, cv2.COLOR_BGR2RGB))
-    axs[0].set_title('Imagen Original')
-    axs[1].imshow(cv2.cvtColor(img_filtered, cv2.COLOR_GRAY2RGB))
-    axs[1].set_title('Imagen Filtrada Normalizada')
-    plt.show()
+    return [cv2.cvtColor(M1, cv2.COLOR_BGR2RGB), cv2.cvtColor(img_filtered, cv2.COLOR_GRAY2RGB)]
 
 
 # 5. Detección de orillas (Por completar)
