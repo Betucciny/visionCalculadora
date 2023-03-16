@@ -193,14 +193,7 @@ def detect_edges_sobel(img):
     magnitude_norm = cv2.normalize(magnitude, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
     direction_norm = cv2.normalize(direction, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
 
-    # Crear una lista con las imágenes procesadas
-    images = [
-        {'image': sobel_x, 'cmap': 'gray'},
-        {'image': sobel_y, 'cmap': 'gray'},
-        {'image': magnitude_norm, 'cmap': 'gray'}
-    ]
-
-    return images
+    return [sobel_x, sobel_y, magnitude_norm
 
 
 # (b) Detector Canny (Revisar)
@@ -223,12 +216,5 @@ def detect_edges_canny(img):
     # Aplicar Canny
     canny = cv2.Canny(gray, 100, 200)
 
-    # Mostrar las imágenes de bordes en X, Y y la magnitud
-    fig, axs = plt.subplots(1, 3, figsize=(15, 5))
-    axs[0].imshow(magnitude_norm, cmap='gray')
-    axs[0].set_title('Magnitud de los bordes')
-    axs[1].imshow(direction_norm, cmap='gray')
-    axs[1].set_title('Dirección de los bordes')
-    axs[2].imshow(canny, cmap='gray')
-    axs[2].set_title('Canny')
-    plt.show()
+    return [magnitude_norm, direction_norm, canny]
+
