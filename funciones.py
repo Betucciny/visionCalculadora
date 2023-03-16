@@ -173,8 +173,7 @@ def Conv(M1, kernel):
         for j in range(width-3):
             for k in range(3):
                 M2[i, j, k] = np.sum(M1[i:i + 3, j:j + 3, k] * kernel)
-    # M2 = normalize(M2)
-    cv2.imwrite('output.png', M2)
+    return M2
 
 
 # (a) Detector de orillas Sobel de 3x3 (Revisar)

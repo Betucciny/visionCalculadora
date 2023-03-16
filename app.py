@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter.messagebox import showinfo
 from funciones import *
 from tkinter import filedialog as fd
-from functools import partial
+from mask_mem import *
 
 
 def abrir_imagen():
@@ -78,7 +78,8 @@ filtro_puntual.add_cascade(label="Aclarado Exponencial", menu=expa)
 filtro_puntual.add_cascade(label="Binario", menu=binario)
 filtro_puntual.add_cascade(label="Binario Inverso", menu=binario_inverso)
 
-equual_hist = Menu(filtro_puntual, tearoff=0)
+
+equal_hist = Menu(filtro_puntual, tearoff=0)
 
 
 def esp_hist(imagen):
@@ -89,12 +90,16 @@ def esp_hist(imagen):
     write_histogram(resultados[3], 'histograma_equalizado.png')
 
 
-equual_hist.add_command(label="Ecualizar Histograma", command=lambda: (esp_hist(imagen), show_confirmacion1()))
+equal_hist.add_command(label="Ecualizar Histograma", command=lambda: (esp_hist(imagen), show_confirmacion1()))
+
+filt_spacial = Menu(menu_principal, tearoff=0)
+for i, j in zip(mask_list, mask_desc):
+    filt_spacial.add_command(label=i, command=lambda: (write_image(Conv(imagen, j)), show_confirmacion1()))
 
 
 menu_principal.add_cascade(label="Archivo", menu=archivo)
 menu_principal.add_cascade(label="Filtro Puntual", menu=filtro_puntual)
-menu_principal.add_cascade(label="Histograma", menu=equual_hist)
+menu_principal.add_cascade(label="Histograma", menu=equal_hist)
 
 root.config(menu=menu_principal)
 root.mainloop()

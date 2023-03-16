@@ -1,3 +1,4 @@
+import numpy as np
 # Máscaras en el dominio espacial
 mask1 = np.array([
     [0, -1, 0],
