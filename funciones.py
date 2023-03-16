@@ -16,16 +16,20 @@ def FP_iter(M1, func, args=None):
     return M2
 
 
+def write_image(M1):
+    cv2.imwrite('output.png', M1)
+
+
 def normalize(M1):
     return np.floor(_lambda * (M1 - np.min(M1)) / (np.max(M1) - np.min(M1)))
 
 # 2. Filtros Puntuales
 def FP_Iden(M1):
-    cv2.imwrite('output.png', FP_iter(M1, lambda x: x))
+    return FP_iter(M1, lambda x: x)
 
 # Filtro negativo
 def FP_Neg(M1):
-    cv2.imwrite('output.png', FP_iter(M1, lambda x: _lambda - x))
+    return FP_iter(M1, lambda x: _lambda - x)
 
 # Filtro Gris (R+G+B)/3
 def FP_Grises(M1):
@@ -33,84 +37,72 @@ def FP_Grises(M1):
     for i in range(M1.shape[0]):
         for j in range(M1.shape[1]):
             M2[i, j] = np.mean(M1[i, j])
-    cv2.imwrite('output.png', M2)
+    return M2
 
 # filtro binario
 def FP_Bin(M1, args=_lambda // 2):
     umbral = args
-    cv2.imwrite('output.png', FP_iter(M1, lambda x: _lambda if x > umbral else 0))
+    return FP_iter(M1, lambda x: _lambda if x > umbral else 0)
 
 # filtro binario inverso
 def FP_BinInv(M1, args=_lambda // 2):
     umbral = args
-    cv2.imwrite('output.png', FP_iter(M1, lambda x: 0 if x > umbral else _lambda))
+    return FP_iter(M1, lambda x: 0 if x > umbral else _lambda)
 
 # Filtro aclarado logaritmico, rango dinamico
+# Filtro rango dinamico parametrizado (alfa)
 def FP_Log(M1, args=1):
     a = args
     c = _lambda / np.log(1 + a * _lambda)
-    cv2.imwrite('output.png', FP_iter(M1, lambda x: c * np.log(1 + a * x)))
-
-
-# Filtro rango dinamico parametrizado (alfa)
-
+    return FP_iter(M1, lambda x: c * np.log(1 + a * x))
 
 
 # Filtro correccion Gamma
 def FP_gamma(M1, args=0.5):
     gamma = args
-    cv2.imwrite('output.png', FP_iter(M1, lambda x: _lambda * (x / _lambda) ** gamma))
+    return FP_iter(M1, lambda x: _lambda * (x / _lambda) ** gamma)
 
 # Filtro funcion seno
 def FP_Seno(M1):
-    cv2.imwrite('output.png', FP_iter(M1, lambda x: _lambda * np.sin(x * np.pi / (2 * _lambda))))
+    return FP_iter(M1, lambda x: _lambda * np.sin(x * np.pi / (2 * _lambda)))
 
 # Filtro funcion coseno
 def FP_Coseno(M1):
-    cv2.imwrite('output.png', FP_iter(M1, lambda x: _lambda * (1 - np.cos(x * np.pi / (2 * _lambda)))))
+    return FP_iter(M1, lambda x: _lambda * (1 - np.cos(x * np.pi / (2 * _lambda))))
 
 # Filtro aclarado exponencial
 def FP_Exp_Acl(M1, args=1):
     a = args
     A = _lambda / (1 - np.exp(-a))
-    cv2.imwrite('output.png', FP_iter(M1, lambda x: A * (1 - np.exp(-a * x / _lambda))))
+    return FP_iter(M1, lambda x: A * (1 - np.exp(-a * x / _lambda)))
 
 # Filtro oscurecimiento exponencial
 def FP_Exp_Osc(M1, args=1):
     a = args
     A = _lambda / (np.exp(a)-1)
-    cv2.imwrite('output.png', FP_iter(M1, lambda x: A * (np.exp(a * x / _lambda) - 1)))
+    return FP_iter(M1, lambda x: A * (np.exp(a * x / _lambda) - 1))
 
 
 # Filtro sigmoide seno (Revisar)
 def FP_Sigmoid_Sin(M1, args=(10, 0.5)):
     a, b = args
-    cv2.imwrite('output.png', FP_iter(M1, lambda x: _lambda * (1 / (1 + np.exp(-a * (np.sin(b * (x / 255) - np.pi / 2)))))))
-
-
+    return FP_iter(M1, lambda x: _lambda * (1 / (1 + np.exp(-a * (np.sin(b * (x / 255) - np.pi / 2))))))
 
 # Filtro sigmoide tangente hiperbólica. (Revisar)
 def FP_Sigmoid_Tanh(M1, args=(5, 0.5)):
     a, b = args
-    cv2.imwrite('output.png', FP_iter(M1, lambda x: _lambda * (1 / (1 + np.exp(-a * np.tanh(b * (x / 255 - 0.5)))))))
-
-
-
+    return FP_iter(M1, lambda x: _lambda * (1 / (1 + np.exp(-a * np.tanh(b * (x / 255 - 0.5))))))
 
 # 3. Ecualizacion por histograma (Revisar)
 def histogram_equalization(M1):
     # Convertir imagen a escala de grises
     gray = cv2.cvtColor(M1, cv2.COLOR_BGR2GRAY)
-
     # Calcular histograma de la imagen original
     hist_original = cv2.calcHist([gray], [0], None, [256], [0, 256])
-
     # Ecualizar la imagen
     img_equalized = cv2.equalizeHist(gray)
-
     # Calcular histograma de la imagen ecualizada
     hist_equalized = cv2.calcHist([img_equalized], [0], None, [256], [0, 256])
-
     # Mostrar imagen original y su histograma
     fig, axs = plt.subplots(2, 2, figsize=(10, 10))
     axs[0, 0].imshow(cv2.cvtColor(M1, cv2.COLOR_BGR2RGB))
