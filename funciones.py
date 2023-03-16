@@ -113,12 +113,6 @@ def histogram_equalization(M1):
 
 
 # 4. Filtrado espacial (Revisar)
-# Definir una mascara: Esta mascara aplica un filtro de realce de bordes a la imagen.
-mask = np.array([
-    [0, -1, 0],
-    [-1, 5, -1],
-    [0, -1, 0]
-])
 
 def spatial_filter(M1, mask):
     # Convertir la imagen a escala de grises
