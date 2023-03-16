@@ -94,12 +94,13 @@ equal_hist.add_command(label="Ecualizar Histograma", command=lambda: (esp_hist(i
 
 filt_spacial = Menu(menu_principal, tearoff=0)
 for i, j in zip(mask_list, mask_desc):
-    filt_spacial.add_command(label=i, command=lambda: (write_image(Conv(imagen, j)), show_confirmacion1()))
+    filt_spacial.add_command(label=j, command=lambda: (write_image(Conv(imagen, i)), show_confirmacion1()))
 
 
 menu_principal.add_cascade(label="Archivo", menu=archivo)
 menu_principal.add_cascade(label="Filtro Puntual", menu=filtro_puntual)
 menu_principal.add_cascade(label="Histograma", menu=equal_hist)
+menu_principal.add_cascade(label="Filtro Espacial", menu=filt_spacial)
 
 root.config(menu=menu_principal)
 root.mainloop()
