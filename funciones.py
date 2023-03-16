@@ -118,6 +118,7 @@ mask = np.array([
     [-1, 5, -1],
     [0, -1, 0]
 ])
+
 def spatial_filter(M1, mask):
     # Convertir la imagen a escala de grises
     img_gray = cv2.cvtColor(M1, cv2.COLOR_BGR2GRAY)
