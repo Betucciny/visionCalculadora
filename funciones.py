@@ -22,7 +22,7 @@ def write_histogram(hist, filename='histogram.png'):
 
 
 def write_image(M1, filename='output.png'):
-    cv2.imwrite('output.png', M1)
+    cv2.imwrite(filename, M1)
 
 
 def normalize(M1):
