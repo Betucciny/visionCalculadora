@@ -103,22 +103,7 @@ def histogram_equalization(M1):
     img_equalized = cv2.equalizeHist(gray)
     # Calcular histograma de la imagen ecualizada
     hist_equalized = cv2.calcHist([img_equalized], [0], None, [256], [0, 256])
-    # Mostrar imagen original y su histograma
-    fig, axs = plt.subplots(2, 2, figsize=(10, 10))
-    axs[0, 0].imshow(cv2.cvtColor(M1, cv2.COLOR_BGR2RGB))
-    axs[0, 0].set_title('Imagen Original')
-    axs[0, 1].plot(hist_original)
-    axs[0, 1].set_title('Histograma Original')
-    axs[0, 1].set_xlim([0, 256])
-
-    # Mostrar imagen ecualizada y su histograma
-    axs[1, 0].imshow(cv2.cvtColor(img_equalized, cv2.COLOR_GRAY2RGB))
-    axs[1, 0].set_title('Imagen Ecualizada')
-    axs[1, 1].plot(hist_equalized)
-    axs[1, 1].set_title('Histograma Ecualizado')
-    axs[1, 1].set_xlim([0, 256])
-
-    plt.show()
+    return [cv2.cvtColor(M1, cv2.COLOR_BGR2RGB), hist_original, cv2.cvtColor(img_equalized, cv2.COLOR_GRAY2RGB), hist_equalized]
 
 
 # 4. Filtrado espacial (Revisar)
@@ -150,6 +135,7 @@ def spatial_filter(M1, mask):
 
     # Normalizar la imagen filtrada
     img_filtered = cv2.normalize(img_filtered, None, 0, 255, cv2.NORM_MINMAX)
+
 
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     axs[0].imshow(cv2.cvtColor(M1, cv2.COLOR_BGR2RGB))
