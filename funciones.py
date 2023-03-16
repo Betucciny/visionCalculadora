@@ -19,6 +19,7 @@ def FP_iter(M1, func, args=None):
 def write_histogram(hist, filename='histogram.png'):
     plt.plot(hist)
     plt.savefig(filename)
+    plt.clf()
 
 
 def write_image(M1, filename='output.png'):
