@@ -203,3 +203,61 @@ def Conv(M1, kernel):
     # M2 = normalize(M2)
     cv2.imwrite('output.png', M2)
 
+
+# (a) Detector de orillas Sobel de 3x3 (Revisar)
+def detect_edges_sobel(img):
+    # Convertir a escala de grises
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    # Aplicar Sobel en X e Y
+    sobel_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
+    sobel_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
+
+    # Calcular la magnitud de los gradientes y la dirección
+    magnitude = np.sqrt(sobel_x ** 2 + sobel_y ** 2)
+    direction = np.arctan2(sobel_y, sobel_x)
+
+    # Normalizar las imágenes para el despliegue
+    magnitude_norm = cv2.normalize(magnitude, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
+    direction_norm = cv2.normalize(direction, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
+
+    # Mostrar las imágenes de bordes en X, Y y la magnitud
+    fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+    axs[0].imshow(sobel_x, cmap='gray')
+    axs[0].set_title('Bordes en X')
+    axs[1].imshow(sobel_y, cmap='gray')
+    axs[1].set_title('Bordes en Y')
+    axs[2].imshow(magnitude_norm, cmap='gray')
+    axs[2].set_title('Magnitud de los bordes')
+    plt.show()
+
+
+# (b) Detector Canny (Revisar)
+def detect_edges_canny(img):
+    # Convertir a escala de grises
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    # Aplicar Sobel en X e Y
+    sobel_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
+    sobel_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
+
+    # Calcular la magnitud de los gradientes y la dirección
+    magnitude = np.sqrt(sobel_x ** 2 + sobel_y ** 2)
+    direction = np.arctan2(sobel_y, sobel_x)
+
+    # Normalizar las imágenes para el despliegue
+    magnitude_norm = cv2.normalize(magnitude, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
+    direction_norm = cv2.normalize(direction, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
+
+    # Aplicar Canny
+    canny = cv2.Canny(gray, 100, 200)
+
+    # Mostrar las imágenes de bordes en X, Y y la magnitud
+    fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+    axs[0].imshow(magnitude_norm, cmap='gray')
+    axs[0].set_title('Magnitud de los bordes')
+    axs[1].imshow(direction_norm, cmap='gray')
+    axs[1].set_title('Dirección de los bordes')
+    axs[2].imshow(canny, cmap='gray')
+    axs[2].set_title('Canny')
+    plt.show()
