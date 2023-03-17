@@ -106,6 +106,8 @@ filtro_puntual.add_cascade(label="Aclarado Exponencial", menu=expa)
 filtro_puntual.add_cascade(label="Binario", menu=binario)
 filtro_puntual.add_cascade(label="Binario Inverso", menu=binario_inverso)
 
+filtro_puntual.add_command(label="Sigmoidal Seno", command=lambda: (write_image(FP_Sigmoid_Sin(imagen)), show_confirmacion1()))
+filtro_puntual.add_command(label="Sigmoidal Tanh", command=lambda: (write_image(FP_Sigmoid_Tanh(imagen)), show_confirmacion1()))
 
 equal_hist = Menu(filtro_puntual, tearoff=0)
 

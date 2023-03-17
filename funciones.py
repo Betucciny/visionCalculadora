@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import math
 import numpy as np
 import cv2
 
@@ -90,14 +91,15 @@ def FP_Exp_Osc(M1, args=1):
 
 
 # Filtro sigmoide seno (Revisar)
-def FP_Sigmoid_Sin(M1, args=(10, 0.5)):
-    a, b = args
-    return FP_iter(M1, lambda x: _lambda * (1 / (1 + np.exp(-a * (np.sin(b * (x / 255) - np.pi / 2))))))
+def FP_Sigmoid_Sin(M1, args=.2):
+    a= args
+    M2 = FP_iter(M1, lambda x: 1/(1 + np.exp(-(math.sinh(x)**a))))
+    return normalize(M2)
 
 # Filtro sigmoide tangente hiperbólica. (Revisar)
-def FP_Sigmoid_Tanh(M1, args=(5, 0.5)):
-    a, b = args
-    return FP_iter(M1, lambda x: _lambda * (1 / (1 + np.exp(-a * np.tanh(b * (x / 255 - 0.5))))))
+def FP_Sigmoid_Tanh(M1, args=.2):
+    a = args
+    return FP_iter(M1, lambda x: (_lambda/2) * (1 + np.tanh(a * (x - _lambda / 2))))
 
 # 3. Ecualizacion por histograma (Revisar)
 def histogram_equalization(M1):
