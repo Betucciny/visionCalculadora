@@ -216,5 +216,11 @@ def detect_edges_canny(img):
     # Aplicar Canny
     canny = cv2.Canny(gray, 100, 200)
 
-    return [magnitude_norm, direction_norm, canny]
+    # Realizar el post-procesamiento de Canny
+    edges = cv2.Canny(magnitude_norm, 50, 150, apertureSize=3, L2gradient=True)
+
+    # Normalizar las imágenes para el despliegue
+    edges_norm = cv2.normalize(edges, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
+
+    return [canny, edges_norm]
 
