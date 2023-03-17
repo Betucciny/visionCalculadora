@@ -28,7 +28,6 @@ menu_principal = Menu(root)
 archivo = Menu(menu_principal, tearoff=0)
 archivo.add_command(label="Abrir Imagen", command=abrir_imagen)
 
-
 filtro_puntual = Menu(menu_principal, tearoff=0)
 
 filtro_puntual.add_command(label="Identidad", command=lambda : (write_image(FP_Iden(imagen)), show_confirmacion1()))
