@@ -66,6 +66,7 @@ def FP_Log(M1, args=1):
 # Filtro correccion Gamma
 def FP_gamma(M1, args=0.5):
     gamma = args
+    print(gamma)
     return FP_iter(M1, lambda x: _lambda * (x / _lambda) ** gamma)
 
 # Filtro funcion seno
