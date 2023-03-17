@@ -109,9 +109,8 @@ edges.add_command(label="Sobel", command=lambda: (sobel(imagen), show_confirmaci
 
 def canny(imagen):
     resultados = detect_edges_canny(imagen)
-    write_image(resultados[0], 'magnitud.png')
-    write_image(resultados[1], 'direccion.png')
-    write_image(resultados[2], 'canny.png')
+    write_image(resultados[0], 'canny.png')
+    write_image(resultados[1], 'post.png')
 
 
 edges.add_command(label="Canny", command=lambda: (canny(imagen), show_confirmacion1()))
